@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.belle.springsecurityjwt.dao.UsersDao">
+    <resultMap id="usersMap" type="Users">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="education" column="education"/>
+        <result property="graduationSchool" column="graduationschool"/>
+        <result property="profession" column="profession"/>
+        <result property="profile" column="profile"/>
+    </resultMap>
+    <sql id="usersColumn">id,name,phone,email,education,graduationschool,profession,profile</sql>
+    <select id="getAll" resultMap="usersMap">
+        select <include refid="usersColumn"/> from users
+    </select>
+
+    <select id="getUserById" resultMap="usersMap" parameterType="int">
+        select <include refid="usersColumn"/> from users
+        where id = #{id}
+    </select>
+
+    <select id="getUserByName" resultMap="usersMap" parameterType="String">
+        select <include refid="usersColumn"/> from users
+        where name = #{name}
+    </select>
+
+    <insert id="insertUsers" parameterType="Users">
+        insert into Users(name,phone,email,education,graduationschool,profession,profile)
+         values(#{name},#{phone},#{email},#{education},#{graduationSchool},#{profession},#{profile})
+    </insert>
+    <update id="updateUsers" parameterType="Users">
+        update users
+        <set>
+            <if test="name!=null">
+            name=#{name},
+            </if>
+            <if test="phone!=null">
+                phone=#{phone},
+            </if>
+            <if test="email!=null">
+                email=#{email},
+            </if>
+            <if test="education!=null">
+                education=#{education},
+            </if>
+            <if test="graduationSchool!=null">
+                graduationschool=#{graduationSchool},
+            </if>
+            <if test="profession!=null">
+                profession=#{profession},
+            </if>
+            <if test="profile!=null">
+                profile=#{profile}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="deleteUsersById" parameterType="int">
+        delete from users where id = #{id}
+    </delete>
+
+</mapper>

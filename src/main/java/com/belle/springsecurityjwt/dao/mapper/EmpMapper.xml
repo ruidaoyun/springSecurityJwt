@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.belle.springsecurityjwt.dao.EmpDAO">
+    <resultMap id="empMap" type="Emp">
+        <id column="empno" property="empno"/>
+        <result column="ename" property="ename"/>
+        <result column="job" property="job"/>
+        <result column="mgr" property="mgr"/>
+        <result column="hiredate" property="hiredate"/>
+        <result column="sal" property="sal"/>
+        <result column="comm" property="comm"/>
+        <result column="deptno" property="deptno"/>
+    </resultMap>
+    <select id="getOne" parameterType="int" resultMap="empMap">
+        select empno,ename,job,mgr,hiredate,sal,comm,deptno
+        from emp where empno=#{empno}
+    </select>
+    <select id="getAll" resultMap="empMap">
+        select empno,ename,job,mgr,hiredate,sal,comm,deptno
+        from emp
+    </select>
+
+</mapper>
