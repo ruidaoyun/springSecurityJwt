@@ -14,10 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,7 +33,7 @@ public class LoginController {
     @Autowired
     private JWTTokenUtils jwtTokenUtils;
 
-    @RequestMapping(value = "/auth/login",method = RequestMethod.POST)
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String login(@RequestBody LoginDTO loginDTO, HttpServletResponse httpResponse) throws Exception{
         //通过用户名和密码创建一个 Authentication 认证对象，实现类为 UsernamePasswordAuthenticationToken
         System.out.println (loginDTO);
@@ -48,9 +45,10 @@ public class LoginController {
         }*/
         if (Objects.nonNull (authenticationToken)){
             UserLogin user=userLoginDAO.selectUserByUsername (authenticationToken.getPrincipal ().toString ());
-            if (user==null){
+            System.out.println (user);
+            /*if (user==null){
                 return JSONResult.fillResultString (1,"用户名不存在",null);
-            }
+            }*/
         }
         try {
             //通过 AuthenticationManager（默认实现为ProviderManager）的authenticate方法验证 Authentication 对象
@@ -61,7 +59,7 @@ public class LoginController {
             String token = jwtTokenUtils.createToken(authentication,false);
             //将Token写入到Http头部
             httpResponse.addHeader(WebSecurityConfig.AUTHORIZATION_HEADER,"Bearer "+token);
-            return "Bearer "+token;
+            return JSONResult.fillResultString (0,"登录成功","Bearer "+token);
         }catch (BadCredentialsException authentication){
             return JSONResult.fillResultString (1,"密码错误",null);
         }
@@ -74,5 +72,10 @@ public class LoginController {
             new SecurityContextLogoutHandler ().logout(request, response, auth);
         }
         //return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
+    }
+
+    @PostMapping ("error")
+    public String error(){
+        return JSONResult.fillResultString (1,"用户名或密码错误",null);
     }
 }

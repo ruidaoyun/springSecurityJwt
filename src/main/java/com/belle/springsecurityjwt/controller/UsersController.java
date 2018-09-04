@@ -19,7 +19,7 @@ public class UsersController {
     @Autowired
     private HttpServletResponse response;
 
-    @GetMapping("all")
+    @GetMapping()
     public List<Users> getAll(){
 
 
@@ -31,10 +31,10 @@ public class UsersController {
         return usersService.getUserById (id);
     }
 
-    @GetMapping()
+    /*@GetMapping()
     public Users getUserByName(@RequestParam("name") String name){
         return usersService.getUserByName (name);
-    }
+    }*/
 
     @DeleteMapping("{id}")
     public String delete(@PathVariable("id")Integer id){
@@ -56,8 +56,11 @@ public class UsersController {
 
     }
 
-    @PutMapping
-    public String update(@RequestBody Users users){
+    @PutMapping("{id}")
+    public String update(
+            @PathVariable Integer id,
+            @RequestBody Users users){
+        users.setId (id);
         System.out.println (users);
         Integer i=usersService.updateUsers (users);
         if (i>0){

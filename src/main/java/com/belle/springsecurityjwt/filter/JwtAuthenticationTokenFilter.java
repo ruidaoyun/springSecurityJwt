@@ -43,10 +43,8 @@ public class JwtAuthenticationTokenFilter extends GenericFilterBean {
         }catch (ExpiredJwtException e){                                     //JWT失效
             log.info("Security exception for user {} - {}",
                     e.getClaims().getSubject(), e.getMessage());
-
-            log.trace("Security exception trace: {}", e);
-            //((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            ((HttpServletResponse) servletResponse).getWriter ().write ( JSONResult.fillResultString (1,"未授权",null));
+            ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            ((HttpServletResponse) servletResponse).getWriter ().write ( JSONResult.fillResultString (1,"jwt失效",null));
         }
     }
 
@@ -61,4 +59,6 @@ public class JwtAuthenticationTokenFilter extends GenericFilterBean {
         }
         return null;
     }
+
+
 }

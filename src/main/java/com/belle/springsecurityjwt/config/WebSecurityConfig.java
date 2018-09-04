@@ -1,6 +1,7 @@
 package com.belle.springsecurityjwt.config;
 
 import com.belle.springsecurityjwt.filter.JwtAuthenticationTokenFilter;
+import com.belle.springsecurityjwt.security.RestAuthenticationAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -51,19 +53,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //验证Http请求
                 .authorizeRequests()
                 //允许所有用户访问首页 与 登录
-                .antMatchers("/", "/auth/login").permitAll()
+                .antMatchers("/", "/login").permitAll()
                 //跨域设置
                 .antMatchers(HttpMethod.OPTIONS, "/oauth/token", "/rest/**", "/api/**", "/**").permitAll ()
                 //其它任何请求都要经过认证通过
                 .anyRequest().authenticated()
-                //用户页面需要用户权限
-                .antMatchers("/userpage").hasAnyRole("USER")
+                .antMatchers (HttpMethod.GET,"users").hasRole ("normal")
+                /*//用户页面需要用户权限
+                .antMatchers("/userpage").hasAnyRole("USER")*/
                 .and()
                 //设置登出
                 .logout().permitAll();
         //添加JWT filter 在
         http
                 .addFilterBefore(genericFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        //自定义AccessDeniedException的返回值
+        http
+                .exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
+
     }
 
     @Bean
@@ -74,5 +81,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public GenericFilterBean genericFilterBean() {
         return new JwtAuthenticationTokenFilter ();
+    }
+
+    @Bean
+    public AccessDeniedHandler getAccessDeniedHandler() {
+        return new RestAuthenticationAccessDeniedHandler ();
     }
 }

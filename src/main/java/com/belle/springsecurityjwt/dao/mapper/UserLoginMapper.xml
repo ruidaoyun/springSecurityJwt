@@ -11,8 +11,8 @@
         <id property="id" column="id"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
-        <collection property="roles" ofType="Role">
-            <id property="id" column="id"/>
+        <collection property="roles" javaType="List" ofType="Role">
+            <id property="roleId" column="role_id"/>
             <result property="roleName" column="role_name"/>
         </collection>
     </resultMap>
@@ -25,7 +25,7 @@
         select u.*,r.*
         from user_login u
         left join user_role ur on u.id = ur.user_id
-        left join role r on r.id = ur.role_id
+        left join role r on r.role_id = ur.role_id
         where username =#{username}
     </select>
     <select id="selectAllUsers" resultMap="userLoginMap">

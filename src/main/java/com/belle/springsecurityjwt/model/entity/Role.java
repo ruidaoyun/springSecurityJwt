@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Role {
-    private Long id;
+    private Long roleId;
     private String roleName;
 
 }

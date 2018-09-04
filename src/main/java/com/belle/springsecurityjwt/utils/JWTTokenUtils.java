@@ -1,8 +1,10 @@
 package com.belle.springsecurityjwt.utils;
 
+import com.belle.springsecurityjwt.model.dto.JSONResult;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +13,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -18,6 +22,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class JWTTokenUtils {
+    @Autowired
+    private HttpServletResponse response;
 
     private final Logger log = LoggerFactory.getLogger(JWTTokenUtils.class);
 
@@ -31,8 +37,8 @@ public class JWTTokenUtils {
 
     @PostConstruct
     public void init() {
-        this.secretKey = "Linyuanmima";
-        int secondIn1day = 1000 ;
+        this.secretKey = "rdyPassword";
+        int secondIn1day = 24*60*60*1000 ;
         this.tokenValidityInMilliseconds = secondIn1day * 2L;
         this.tokenValidityInMillisecondsForRememberMe = secondIn1day * 7L;
     }
@@ -79,26 +85,31 @@ public class JWTTokenUtils {
     }
 
     //验证Token是否正确
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) throws IOException {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);   //通过密钥验证Token
             return true;
         }catch (SignatureException e) {                                     //签名异常
             log.info("Invalid JWT signature.");
-            log.trace("Invalid JWT signature trace: {}", e);
-        } catch (MalformedJwtException e) {                                 //JWT格式错误
+            /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter ().write (JSONResult.fillResultString (1,"Invalid JWT signature",null));
+        */} catch (MalformedJwtException e) {                                 //JWT格式错误
             log.info("Invalid JWT token.");
-            log.trace("Invalid JWT token trace: {}", e);
-        } catch (ExpiredJwtException e) {                                   //JWT过期
+            /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter ().write (JSONResult.fillResultString (1,"Invalid JWT token",null));
+        */} catch (ExpiredJwtException e) {                                   //JWT过期
             log.info("Expired JWT token.");
-            log.trace("Expired JWT token trace: {}", e);
-        } catch (UnsupportedJwtException e) {                               //不支持该JWT
+            /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter ().write (JSONResult.fillResultString (1,"Expired JWT token",null));
+        */} catch (UnsupportedJwtException e) {                               //不支持该JWT
             log.info("Unsupported JWT token.");
-            log.trace("Unsupported JWT token trace: {}", e);
-        } catch (IllegalArgumentException e) {                              //参数错误异常
+            /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter ().write (JSONResult.fillResultString (1,"Unsupported JWT token",null));
+        */} catch (IllegalArgumentException e) {                              //参数错误异常
             log.info("JWT token compact of handler are invalid.");
-            log.trace("JWT token compact of handler are invalid trace: {}", e);
-        }
+            /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter ().write (JSONResult.fillResultString (1,"JWT token compact of handler are invalid",null));
+        */}
         return false;
     }
 }

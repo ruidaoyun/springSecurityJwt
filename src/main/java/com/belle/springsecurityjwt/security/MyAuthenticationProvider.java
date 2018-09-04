@@ -21,6 +21,7 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials(); //获取用户输入的密码
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         if (userDetails.getPassword().equals(password)) {
+            System.err.println (userDetails.getAuthorities ());
             return new UsernamePasswordAuthenticationToken (userDetails, null, userDetails.getAuthorities());
         }
         return null;
