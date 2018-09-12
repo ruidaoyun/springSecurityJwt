@@ -1,5 +1,6 @@
 package com.belle.springsecurityjwt.utils;
 
+import com.belle.springsecurityjwt.model.dto.Result;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -80,31 +80,25 @@ public class JWTTokenUtils {
     }
 
     //验证Token是否正确
-    public boolean validateToken(String token) throws IOException {
+    public Result validateToken(String token) throws Exception {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);   //通过密钥验证Token
-            return true;
+            return new Result (0,"token验证通过",null);
         }catch (SignatureException e) {                                     //签名异常
             log.info("Invalid JWT signature.");
-            /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter ().write (JSONResult.fillResultString (1,"Invalid JWT signature",null));
-        */} catch (MalformedJwtException e) {                                 //JWT格式错误
+            return new Result (1,"签名异常",null);
+        } catch (MalformedJwtException e) {                                 //JWT格式错误
             log.info("Invalid JWT token.");
-            /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter ().write (JSONResult.fillResultString (1,"Invalid JWT token",null));
-        */} catch (ExpiredJwtException e) {                                   //JWT过期
+            return new Result (1,"JWT格式错误",null);
+        } catch (ExpiredJwtException e) {                                   //JWT过期
             log.info("Expired JWT token.");
-            /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter ().write (JSONResult.fillResultString (1,"Expired JWT token",null));
-        */} catch (UnsupportedJwtException e) {                               //不支持该JWT
+            return new Result (1,"JWT过期",null);
+        } catch (UnsupportedJwtException e) {                               //不支持该JWT
             log.info("Unsupported JWT token.");
-            /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter ().write (JSONResult.fillResultString (1,"Unsupported JWT token",null));
-        */} catch (IllegalArgumentException e) {                              //参数错误异常
+            return new Result (1,"不支持该JWT",null);
+        } catch (IllegalArgumentException e) {                              //参数错误异常
             log.info("JWT token compact of handler are invalid.");
-            /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter ().write (JSONResult.fillResultString (1,"JWT token compact of handler are invalid",null));
-        */}
-        return false;
+            return new Result (1,"参数错误异常",null);
+        }
     }
 }

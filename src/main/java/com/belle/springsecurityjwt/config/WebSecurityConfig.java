@@ -1,6 +1,7 @@
 package com.belle.springsecurityjwt.config;
 
 import com.belle.springsecurityjwt.filter.JwtAuthenticationTokenFilter;
+import com.belle.springsecurityjwt.security.JWTAuthenticationEntryPoint;
 import com.belle.springsecurityjwt.security.RestAuthenticationAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //关闭CSRF、CORS
                 .cors().disable()
                 .csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler()).and()
+                .exceptionHandling ().accessDeniedHandler (accessDeniedHandler ()).and ()
                 //由于使用Token，所以不需要Session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -55,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //允许所有用户访问首页 与 登录
                 .antMatchers("/", "/login").permitAll()
                 //跨域设置
-                .antMatchers(HttpMethod.OPTIONS, "/oauth/token", "/rest/**", "/api/**", "/**").permitAll ()
+                .antMatchers(HttpMethod.OPTIONS,   "/login", "/**").permitAll ()
                 //其它任何请求都要经过认证通过
                 .anyRequest().authenticated()
                 .antMatchers (HttpMethod.GET,"users").hasRole ("normal")
@@ -67,9 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //添加JWT filter 在
         http
                 .addFilterBefore(genericFilterBean(), UsernamePasswordAuthenticationFilter.class);
-        //自定义AccessDeniedException的返回值
-        http
-                .exceptionHandling().accessDeniedHandler(getAccessDeniedHandler());
+
 
     }
 
@@ -84,7 +85,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AccessDeniedHandler getAccessDeniedHandler() {
+    public AccessDeniedHandler accessDeniedHandler() {
         return new RestAuthenticationAccessDeniedHandler ();
+    }
+
+    @Bean
+    public JWTAuthenticationEntryPoint unauthorizedHandler(){
+        return new JWTAuthenticationEntryPoint ();
     }
 }
