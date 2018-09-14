@@ -8,10 +8,11 @@ import com.belle.springsecurityjwt.model.dto.LoginDTO;
 import com.belle.springsecurityjwt.model.entity.UserLogin;
 import com.belle.springsecurityjwt.utils.JWTTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
@@ -60,8 +61,8 @@ public class LoginController {
             //将Token写入到Http头部
             httpResponse.addHeader(WebSecurityConfig.AUTHORIZATION_HEADER,"Bearer "+token);
             return JSONResult.fillResultString (0,"登录成功","Bearer "+token);
-        }catch (BadCredentialsException authentication){
-            return JSONResult.fillResultString (1,"密码错误",null);
+        }catch (AuthenticationException ae){
+            return JSONResult.fillResultString (2,"用户名或密码错误",null);
         }
     }
 
@@ -74,8 +75,9 @@ public class LoginController {
         //return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
     }
 
-    @PostMapping ("error")
+    @PostMapping ("/error")
+    @ResponseStatus(HttpStatus.OK)
     public String error(){
-        return JSONResult.fillResultString (1,"用户名或密码错误",null);
+        return JSONResult.fillResultString (2,"用户名或密码错误",null);
     }
 }

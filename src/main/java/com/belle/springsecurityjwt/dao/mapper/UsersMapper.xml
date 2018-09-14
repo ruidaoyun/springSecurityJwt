@@ -30,6 +30,7 @@
         insert into Users(name,phone,email,education,graduationschool,profession,profile)
          values(#{name},#{phone},#{email},#{education},#{graduationSchool},#{profession},#{profile})
     </insert>
+
     <update id="updateUsers" parameterType="Users">
         update users
         <set>

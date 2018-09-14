@@ -5,6 +5,7 @@ import com.belle.springsecurityjwt.model.dto.JSONResult;
 import com.belle.springsecurityjwt.model.entity.Users;
 import com.belle.springsecurityjwt.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,8 +27,10 @@ public class UsersController {
         return usersService.getAll ();
     }
 
+    @Secured("normal")
     @GetMapping("{id}")
     public Users getUserById(@PathVariable("id")Integer id){
+        response.setHeader("Access-Control-Allow-Origin", "*");
         return usersService.getUserById (id);
     }
 
@@ -38,6 +41,7 @@ public class UsersController {
 
     @DeleteMapping("{id}")
     public String delete(@PathVariable("id")Integer id){
+        response.setHeader("Access-Control-Allow-Origin", "*");
         Integer i=usersService.deleteUsersById (id);
 
         if (i>0){
@@ -48,6 +52,7 @@ public class UsersController {
 
     @PostMapping
     public String insert(@RequestBody Users users){
+        response.setHeader("Access-Control-Allow-Origin", "*");
         Integer i=usersService.insertUsers (users);
         if (i>0){
             return JSONResult.fillResultString (0,"insert success",null);
@@ -60,6 +65,7 @@ public class UsersController {
     public String update(
             @PathVariable Integer id,
             @RequestBody Users users){
+        response.setHeader("Access-Control-Allow-Origin", "*");
         users.setId (id);
         System.out.println (users);
         Integer i=usersService.updateUsers (users);

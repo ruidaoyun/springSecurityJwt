@@ -23,4 +23,9 @@ public class EmpServiceImpl implements EmpService {
     public Emp getOne(Integer empno) {
         return empDAO.getOne (empno);
     }
+
+    @Override
+    public void insertOne(Emp emp) {
+        empDAO.insertOne (emp);
+    }
 }

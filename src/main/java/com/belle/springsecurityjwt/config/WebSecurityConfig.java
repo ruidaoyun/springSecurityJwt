@@ -55,23 +55,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //验证Http请求
                 .authorizeRequests()
-                //允许所有用户访问首页 与 登录
-                .antMatchers("/", "/login").permitAll()
-                //跨域设置
+                //允许所有用户访问登录接口
+                .antMatchers( "/login").permitAll()
+                //跨域设置，options请求允许访问
                 .antMatchers(HttpMethod.OPTIONS,   "/login", "/**").permitAll ()
                 //其它任何请求都要经过认证通过
                 .anyRequest().authenticated()
-                .antMatchers (HttpMethod.GET,"users").hasRole ("normal")
+                .antMatchers (HttpMethod.GET,"/users").hasRole ("normal")
                 /*//用户页面需要用户权限
                 .antMatchers("/userpage").hasAnyRole("USER")*/
                 .and()
                 //设置登出
                 .logout().permitAll();
-        //添加JWT filter 在
+        //添加JWT filter
         http
                 .addFilterBefore(genericFilterBean(), UsernamePasswordAuthenticationFilter.class);
-
-
     }
 
     @Bean

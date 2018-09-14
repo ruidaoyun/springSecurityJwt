@@ -9,4 +9,6 @@ public interface EmpDAO {
     List<Emp> getAll();
 
     Emp getOne(Integer empno);
+
+    void insertOne(Emp emp);
 }

@@ -8,7 +8,6 @@ public class JSONResult{
             put("message", message);
             put("result", result);
         }};
-
         return jsonObject.toString();
     }
 }

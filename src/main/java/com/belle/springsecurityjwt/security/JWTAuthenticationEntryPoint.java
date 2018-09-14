@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * This is invoked when user tries to access a secured REST resource without supplying any credentials
+ * 自定义验证token错误信息
  */
 @Component
 @Slf4j
@@ -25,13 +25,17 @@ public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
         log.info("到达JWTAuthenticationEntryPoint");
+        //JwtAuthenticationTokenFilter的
         Result validateToken=(Result)request.getAttribute ("validateToken");
+        System.out.println (validateToken);
         if(validateToken != null){
-            response.setStatus(403);
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setStatus(200);
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().append(JSONResult.fillResultString (validateToken.getStatus (),validateToken.getMsg (),validateToken.getData ()));
         }else{
-            response.setStatus(403);
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setStatus(200);
             response.getWriter().append(UNAUTHORIZED);
         }
     }
