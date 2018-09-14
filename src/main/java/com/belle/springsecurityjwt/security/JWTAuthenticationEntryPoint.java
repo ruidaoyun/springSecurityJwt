@@ -27,7 +27,7 @@ public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
         log.info("到达JWTAuthenticationEntryPoint");
         //JwtAuthenticationTokenFilter的
         Result validateToken=(Result)request.getAttribute ("validateToken");
-        System.out.println (validateToken);
+        //System.out.println (validateToken);
         if(validateToken != null){
             response.setHeader("Access-Control-Allow-Origin", "*");
             response.setStatus(200);

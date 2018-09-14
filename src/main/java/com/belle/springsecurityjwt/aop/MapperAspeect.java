@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Aspect
 @Component
 @Slf4j
@@ -37,7 +35,7 @@ public class MapperAspeect {
 
     @AfterThrowing("weblog()")
     public void throwss(JoinPoint jp){
-        log.info ("方法异常时执行");
+        log.error ("方法异常时执行");
     }
 
     @After ("weblog()")
@@ -50,7 +48,6 @@ public class MapperAspeect {
         //log.info ("方法环绕start");
         long timeBefore=System.currentTimeMillis ();
         ServletRequestAttributes attributes=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes ();
-        HttpServletRequest request=attributes.getRequest ();
         try {
             Object o=pjp.proceed ();
             //log.info ("方法环绕proceed，结果是："+o);
