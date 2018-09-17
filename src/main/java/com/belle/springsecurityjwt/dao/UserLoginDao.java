@@ -5,7 +5,7 @@ import com.belle.springsecurityjwt.model.entity.UserLogin;
 
 import java.util.List;
 
-public interface UserLoginDAO {
+public interface UserLoginDao {
     UserLogin selectUserById(Long id);
 
     UserLogin selectUserByUsername(String username);

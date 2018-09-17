@@ -2,8 +2,8 @@ package com.belle.springsecurityjwt.utils;
 
 import com.belle.springsecurityjwt.model.dto.Result;
 import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,9 +18,11 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class JWTTokenUtils {
 
-    private final Logger log = LoggerFactory.getLogger(JWTTokenUtils.class);
+    @Autowired
+    private RedisUtil redisUtil;
 
     private static final String AUTHORITIES_KEY = "auth";
 
@@ -54,17 +56,18 @@ public class JWTTokenUtils {
             validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
         }
 
-        return Jwts.builder()                                   //创建Token令牌
-                .setSubject(authentication.getName())           //设置面向用户
-                .claim(AUTHORITIES_KEY,authorities)             //添加权限属性
-                .setExpiration(validity)                        //设置失效时间
-                .signWith(SignatureAlgorithm.HS512,secretKey)   //生成签名
-                .compact();
+        String token=Jwts.builder ()                                   //创建Token令牌
+                .setSubject (authentication.getName ())           //设置面向用户
+                .claim (AUTHORITIES_KEY, authorities)             //添加权限属性
+                .setExpiration (validity)                        //设置失效时间
+                .signWith (SignatureAlgorithm.HS512, secretKey)   //生成签名
+                .compact ();
+        redisUtil.set (String.valueOf (authentication.getName ().hashCode ()),token,tokenValidityInMilliseconds);
+        return token;
     }
 
     //获取用户权限
     public Authentication getAuthentication(String token){
-        System.out.println("token:"+token);
         Claims claims = Jwts.parser()                           //解析Token的payload
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
@@ -85,19 +88,19 @@ public class JWTTokenUtils {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);   //通过密钥验证Token
             return new Result (0,"token验证通过",null);
         }catch (SignatureException e) {                                     //签名异常
-            log.info("Invalid JWT signature.");
+            log.error ("Invalid JWT signature.");
             return new Result (1,"签名异常",null);
         } catch (MalformedJwtException e) {                                 //JWT格式错误
-            log.info("Invalid JWT token.");
+            log.error("Invalid JWT token.");
             return new Result (1,"JWT格式错误",null);
         } catch (ExpiredJwtException e) {                                   //JWT过期
-            log.info("Expired JWT token.");
+            log.error("Expired JWT token.");
             return new Result (1,"JWT过期",null);
         } catch (UnsupportedJwtException e) {                               //不支持该JWT
-            log.info("Unsupported JWT token.");
+            log.error("Unsupported JWT token.");
             return new Result (1,"不支持该JWT",null);
         } catch (IllegalArgumentException e) {                              //参数错误异常
-            log.info("JWT token compact of handler are invalid.");
+            log.error("JWT token compact of handler are invalid.");
             return new Result (1,"参数错误异常",null);
         }
     }

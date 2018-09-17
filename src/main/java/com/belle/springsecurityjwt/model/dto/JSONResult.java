@@ -2,11 +2,11 @@ package com.belle.springsecurityjwt.model.dto;
 import org.json.JSONObject;
 
 public class JSONResult{
-    public static String fillResultString(Integer status, String message, Object result){
+    public static String fillResultString(Integer code, String msg, Object data){
         JSONObject jsonObject = new JSONObject(){{
-            put("status", status);
-            put("message", message);
-            put("result", result);
+            put("code", code);
+            put("msg", msg);
+            put("data", data);
         }};
         return jsonObject.toString();
     }

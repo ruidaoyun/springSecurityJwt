@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.belle.springsecurityjwt.dao.KnowledgeDao">
+    <resultMap id="questionMap" type="KnowledgeQuestion">
+        <result column="question_id" property="questionId"/>
+        <result column="question_description" property="questionDescription"/>
+        <collection property="answerList" ofType="KnowledgeAnswer" javaType="List">
+            <result column="question_id" property="questionId"/>
+            <result column="answer_id" property="answerId"/>
+            <result column="answer_name" property="answerName"/>
+            <result column="answer_description" property="answerDescription"/>
+            <result column="is_true" property="isTrue"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="answerMap" type="KnowledgeQuestion">
+            <result column="question_id" property="questionId"/>
+            <result column="answer_id" property="answerId"/>
+            <result column="answer_name" property="answerName"/>
+            <result column="answer_description" property="answerDescription"/>
+            <result column="is_true" property="isTrue"/>
+    </resultMap>
+
+    <select id="selectAllQuestion" resultMap="questionMap">
+          select q.*,a.*
+          from knowledge_question q join knowledge_answer a
+          on q."question_id" = a.question_id
+    </select>
+
+    <select id="selectTrueQuestionAnswer" resultMap="answerMap">
+        select question_id,answer_name
+        from knowledge_answer
+        where question_id =#{questionId} and is_true = 1;
+    </select>
+</mapper>

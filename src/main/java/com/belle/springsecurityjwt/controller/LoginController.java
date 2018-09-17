@@ -2,7 +2,7 @@ package com.belle.springsecurityjwt.controller;
 
 
 import com.belle.springsecurityjwt.config.WebSecurityConfig;
-import com.belle.springsecurityjwt.dao.UserLoginDAO;
+import com.belle.springsecurityjwt.dao.UserLoginDao;
 import com.belle.springsecurityjwt.model.dto.JSONResult;
 import com.belle.springsecurityjwt.model.dto.LoginDTO;
 import com.belle.springsecurityjwt.model.entity.UserLogin;
@@ -26,7 +26,7 @@ import java.util.Objects;
 public class LoginController {
 
     @Autowired
-    private UserLoginDAO userLoginDAO;
+    private UserLoginDao userLoginDAO;
 
     @Autowired
     private AuthenticationManager authenticationManager;

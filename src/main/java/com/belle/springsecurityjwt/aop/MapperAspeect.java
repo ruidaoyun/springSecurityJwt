@@ -44,7 +44,7 @@ public class MapperAspeect {
     }*/
 
     @Around ("weblog()")
-    public Object arround(ProceedingJoinPoint pjp){
+    public Object around(ProceedingJoinPoint pjp){
         //log.info ("方法环绕start");
         long timeBefore=System.currentTimeMillis ();
         ServletRequestAttributes attributes=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes ();

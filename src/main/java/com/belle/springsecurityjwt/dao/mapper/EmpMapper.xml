@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.belle.springsecurityjwt.dao.EmpDAO">
+<mapper namespace="com.belle.springsecurityjwt.dao.EmpDao">
     <resultMap id="empMap" type="Emp">
         <id column="empno" property="empno"/>
         <result column="ename" property="ename"/>

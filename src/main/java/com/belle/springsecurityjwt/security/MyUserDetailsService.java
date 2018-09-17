@@ -1,7 +1,7 @@
 package com.belle.springsecurityjwt.security;
 
 
-import com.belle.springsecurityjwt.dao.UserLoginDAO;
+import com.belle.springsecurityjwt.dao.UserLoginDao;
 import com.belle.springsecurityjwt.model.entity.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
     @Autowired
-    private UserLoginDAO userLoginDAO;
+    private UserLoginDao userLoginDAO;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {

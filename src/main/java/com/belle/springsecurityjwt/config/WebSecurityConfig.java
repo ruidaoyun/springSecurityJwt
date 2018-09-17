@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS,   "/login", "/**").permitAll ()
                 //其它任何请求都要经过认证通过
                 .anyRequest().authenticated()
-                .antMatchers (HttpMethod.GET,"/users").hasRole ("normal")
+                //.antMatchers (HttpMethod.GET,"/users").hasRole ("normal")
                 /*//用户页面需要用户权限
                 .antMatchers("/userpage").hasAnyRole("USER")*/
                 .and()
@@ -70,6 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //添加JWT filter
         http
                 .addFilterBefore(genericFilterBean(), UsernamePasswordAuthenticationFilter.class);
+
     }
 
     @Bean

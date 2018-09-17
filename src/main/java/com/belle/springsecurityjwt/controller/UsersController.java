@@ -51,7 +51,7 @@ public class UsersController {
     }
 
     @PostMapping
-    public String insert(@RequestBody Users users){
+    public String insert( Users users){
         response.setHeader("Access-Control-Allow-Origin", "*");
         Integer i=usersService.insertUsers (users);
         if (i>0){

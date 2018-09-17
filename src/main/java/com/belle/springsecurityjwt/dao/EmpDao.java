@@ -5,7 +5,7 @@ import com.belle.springsecurityjwt.model.entity.Emp;
 
 import java.util.List;
 
-public interface EmpDAO {
+public interface EmpDao {
     List<Emp> getAll();
 
     Emp getOne(Integer empno);

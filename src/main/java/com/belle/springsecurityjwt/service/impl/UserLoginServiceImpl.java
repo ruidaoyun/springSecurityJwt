@@ -1,7 +1,7 @@
 package com.belle.springsecurityjwt.service.impl;
 
 
-import com.belle.springsecurityjwt.dao.UserLoginDAO;
+import com.belle.springsecurityjwt.dao.UserLoginDao;
 import com.belle.springsecurityjwt.model.entity.UserLogin;
 import com.belle.springsecurityjwt.service.UserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserLoginServiceImpl implements UserLoginService {
     @Autowired
-    private UserLoginDAO userLoginDAO;
+    private UserLoginDao userLoginDAO;
 
 
     @Override
