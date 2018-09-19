@@ -23,7 +23,6 @@ public class KnowledgeController {
     public String test(@RequestBody RecordDTO[] records){
         for (int i=0; i < records.length; i++) {
             RecordDTO record=records[i];
-
         }
     }*/
     @GetMapping("/ture")
