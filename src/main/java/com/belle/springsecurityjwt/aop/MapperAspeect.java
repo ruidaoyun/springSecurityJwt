@@ -1,3 +1,4 @@
+/*
 package com.belle.springsecurityjwt.aop;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,8 @@ public class MapperAspeect {
     @Pointcut("execution(public * com.belle.springsecurityjwt.dao.*.*(..))")
     public void weblog(){}
 
-    /*@Before ("weblog()")
+    */
+/*@Before ("weblog()")
     public void deBefore(JoinPoint joinPoint)throws Exception{
         ServletRequestAttributes attributes=(ServletRequestAttributes) RequestContextHolder.getRequestAttributes ();
         HttpServletRequest request=attributes.getRequest ();
@@ -25,9 +27,11 @@ public class MapperAspeect {
         log.info ("IP:"+request.getRemoteAddr ());
         log.info ("CLASS_METHOD:"+joinPoint.getSignature ().getDeclaringTypeName ()+"."+joinPoint.getSignature ().getName ());
         log.info ("ARGS:"+ Arrays.toString (joinPoint.getArgs ()));
-    }*/
+    }*//*
 
-   /* @AfterReturning(returning="ret",pointcut="weblog()")
+
+   */
+/* @AfterReturning(returning="ret",pointcut="weblog()")
     public void doAfterReturning(Object ret) throws Exception{
         //处理完请求，返回内容
         log.info ("方法返回值："+ret);
@@ -41,7 +45,8 @@ public class MapperAspeect {
     @After ("weblog()")
     public void after(JoinPoint jp){
         log.info ("方法最后执行");
-    }*/
+    }*//*
+
 
     @Around ("weblog()")
     public Object around(ProceedingJoinPoint pjp){
@@ -59,3 +64,4 @@ public class MapperAspeect {
         }
     }
 }
+*/

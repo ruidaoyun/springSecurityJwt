@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.belle.springsecurityjwt.dao.TestDao">
+    <resultMap id="testMap" type="Test">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="parent_id" property="parentId"/>
+        <collection property="tests" ofType="Test">
+        <id column="id1" property="id"/>
+        <result column="name1" property="name"/>
+        <result column="parent_id1" property="parentId"/>
+    </collection>
+    </resultMap>
+    <select id="selectAllTest" resultMap="testMap">
+        select a.*,b.* from test a
+        join (select id id1,name name1,parent_id parent_id1 from test) b on a.id = b.parent_id1
+    </select>
+
+    <select id="selectAllUser" resultType="HashMap">
+        select * from user
+    </select>
+</mapper>

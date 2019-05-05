@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth
                 //自定义获取用户信息
                 .userDetailsService(userDetailsService);
+
                 //设置密码加密
                 //.passwordEncoder(passwordEncoder());
     }
@@ -57,6 +58,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //允许所有用户访问登录接口
                 .antMatchers( "/login").permitAll()
+
+                //antPatterns前面必须加斜杠，不然过滤不了
+                .antMatchers ("/test","/json_test","/json_test2","/export_excel","/import_excel","/index.html","/easyui_data").permitAll ()
+
                 //跨域设置，options请求允许访问
                 .antMatchers(HttpMethod.OPTIONS,   "/login", "/**").permitAll ()
                 //其它任何请求都要经过认证通过
