@@ -22,8 +22,6 @@ public class UsersController {
 
     @GetMapping()
     public List<Users> getAll(){
-
-
         return usersService.getAll ();
     }
 
