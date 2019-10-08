@@ -1,7 +1,6 @@
 package com.belle.springsecurityjwt.test.picture;
 
 import java.awt.*;
-import java.io.IOException;
 
 /**
  * @author: rui.dy
